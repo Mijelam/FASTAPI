@@ -4,8 +4,9 @@ from fastapi.security import HTTPBearer
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel,Field
 from  typing import Optional
-
+import os
 from sqlalchemy import JSON
+import uvicorn
 from JWT import createToken, validateToken
 from models.movie import Movie as modelMovie
 from db.database import  engine,Session,Base
@@ -25,8 +26,9 @@ Base.metadata.create_all(bind=engine)
 @app.get('/',tags=['Inicio'])
 def read_root():
     return HTMLResponse('<h1> Hola papu </h1>')
-
-        
+if __name__== ' __ main __ ':
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)   
 
 
 
