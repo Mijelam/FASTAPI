@@ -1,9 +1,14 @@
-from jwt import encode,decode
+import os
+from jwt import encode, decode
 
-def createToken(data:dict):
-    token: str=encode(payload=data,key='Holi',algorithm='HS256')
+
+def createToken(data: dict):
+    secret_key = os.getenv("JWT_SECRET")
+    token: str = encode(payload=data, key=secret_key, algorithm='HS256')
     return token
 
-def validateToken(token:str):
-    data: dict=decode(token,key='Holi',algorithms=["HS256"])
+
+def validateToken(token: str):
+    secret_key = os.getenv("JWT_SECRET")
+    data: dict = decode(token, key=secret_key, algorithms=["HS256"])
     return data

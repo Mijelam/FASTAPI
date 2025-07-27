@@ -3,10 +3,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-sqlitename='../movies.sqlite'
-base_dir=os.path.dirname(os.path.realpath(__file__))
-databaseUrl=f'sqlite:///{os.path.join(base_dir,sqlitename)}'
+sqlitename = '../movies.sqlite'
+base_dir = os.path.dirname(os.path.realpath(__file__))
+databaseUrl = f'sqlite:///{os.path.join(base_dir, sqlitename)}'
 
-engine=create_engine(databaseUrl,echo=True)
-Session=sessionmaker(bind=engine)
-Base=declarative_base()
+engine = create_engine(databaseUrl, echo=True)
+Session = sessionmaker(bind=engine)
+Base = declarative_base()
