@@ -16,7 +16,21 @@ from routes.user_routes import userRouter
 
 app = FastAPI(
     title="Documentacion automatica",
-    description="endpoints"
+    description="endpoints",
+     openapi_tags=[
+        {
+            "name": "Movies",
+            "description": "Funciones CRUD para las peliculas."
+        },
+        {
+            "name": "Authentication",
+            "description": "Inicio de sesión y creación del Token."
+        },
+        {
+            "name": "Register",
+            "description": "Registro del usuario"
+        }
+    ]
 
 )
 app.include_router(routerMovie)
