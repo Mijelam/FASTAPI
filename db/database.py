@@ -10,3 +10,10 @@ databaseUrl = f'sqlite:///{os.path.join(base_dir, sqlitename)}'
 engine = create_engine(databaseUrl, echo=True)
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
+
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
