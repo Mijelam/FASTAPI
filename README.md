@@ -2,7 +2,7 @@
 
 This is just a small **practice project** to explore how FastAPI works.
 
-You'll quickly notice it's not meant for production — for example, the JWT token is encoded like this:
+You'll quickly notice it's not meant for production  for example, the JWT token is encoded like this:
 
 ```python
 token: str = encode(payload=data, key='Holi', algorithm='HS256')
