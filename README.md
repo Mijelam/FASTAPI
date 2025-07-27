@@ -27,7 +27,7 @@ Coming from Django REST, some differences were immediately noticeable:
 
 - In **Django REST**, you define a **serializer**, link it to a model and data, and use `partial=True` to update only the fields you need..
 - In **FastAPI**, you need to:
-  - Create a **separate Pydantic model** for updates.
+  - Create a **separate Pydantic model** for updates. (You might say this is good because it follows the **S** in **SOLID**, but...)
   - Convert the request body to a dictionary.
   - Manually iterate over the fields and update them one by one.
 
