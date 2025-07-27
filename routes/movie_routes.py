@@ -15,7 +15,6 @@ routerMovie = APIRouter()
 
 
 class Movie(BaseModel):
-    id: Optional[int] = None
     title: str = Field(default="Title of the movie",
                        min_length=8, max_length=60)
     overview: str = Field(default="Description of the movie",
