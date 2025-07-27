@@ -50,7 +50,7 @@ def get_movie(id: int=Path(ge=0)):
         data=db.query(modelMovie).filter(modelMovie.id==id).one()
         return JSONResponse(content=jsonable_encoder(data))
     except NoResultFound:
-        return JSONResponse(content="Eso  no existe pa")
+        return JSONResponse(content="Esa peli no existe")
     finally:
         db.close()
 
@@ -59,7 +59,7 @@ def get_movie_by_category(category:str=Query(min_length=8,max_length=60)):
     db=Session()
     data=db.query(modelMovie).filter(modelMovie.category==category).all()
     if not  data:
-        return JSONResponse(content="Esa categoria no existe pa")
+        return JSONResponse(content="Esa categoria no existe ")
 
     db.close()
     return JSONResponse(content=jsonable_encoder(data))
@@ -91,9 +91,9 @@ def update_movie(id:int,movie_update: MovieUpdate):
             setattr(data, key, value)
 
         db.commit()
-        return JSONResponse(content={"message": "Movie updated successfully"})
+        return JSONResponse(content={"message": "Pelicula correctamente actualizada"})
     except NoResultFound:
-        return JSONResponse(content="Eso  no existe  pa")
+        return JSONResponse(content="Esa  pelicula  no  existe")
     finally:
         db.close()
 
@@ -111,6 +111,6 @@ def delete_movie(id: int):
         return JSONResponse(content={'Message':'Borrado exitosamente'})
 
     except NoResultFound:
-        return  JSONResponse(content="Esa  no existe pa")
+        return  JSONResponse(content="Esa pelicula no existe ")
     finally:
         db.close()
