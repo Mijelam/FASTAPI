@@ -15,8 +15,8 @@ from routes.movie_routes import  routerMovie
 from routes.user_routes import userRouter
 
 app=FastAPI(
-    title="Aprendiendo FP",
-    description="Primeros pasos de una API"
+    title="Documentacion automatica",
+    description="endpoints"
 
 )
 app.include_router(routerMovie)
@@ -25,7 +25,7 @@ Base.metadata.create_all(bind=engine)
 
 @app.get('/',tags=['Inicio'])
 def read_root():
-    return HTMLResponse('<h1> Hola papu </h1>')
+    return HTMLResponse('<h1> Hola desde EC2 </h1>')
 if __name__== ' __ main __ ':
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)   
