@@ -1,51 +1,44 @@
-# FastAPI Practice Project 
+# Movie API
 
-This is just a small **practice project** to explore how FastAPI works.
+This is a REST API for managing movies. I made it with FastAPI and SQLAlchemy while learning backend stuff.  
+You can create, read, update, and delete movies, and also register/login users with JWT tokens.
 
-You'll quickly notice it's not meant for production  for example, the JWT token is encoded like this:
+## Features
 
-```python
-token: str = encode(payload=data, key='Holi', algorithm='HS256')
-```
+* **CRUD for Movies:** Add, see, edit, and delete movies.  
+* **User Auth:** Login and get a token to use the movie endpoints.  
+* **Database:** Uses SQLite with SQLAlchemy.  
+* **Validation:** Uses Pydantic to check the data.  
+* **Testing:** Some tests with pytest.  
+* **Docker:** Includes a `dockerfile` to run it in a container if needed.
 
-Yes. `'Holi'` is the secret key.   
-this was just for testing authentication using **JWT**.
+## Tech Used
 
----
+* FastAPI  
+* SQLAlchemy  
+* Pydantic  
+* PyJWT  
+* Bcrypt  
+* Uvicorn  
+* Pytest 
 
-##  What was the goal?
+## API Endpoints
 
-- Test basic JWT authentication and how request headers work in FastAPI.
-- Use **SQLAlchemy** ORM, **Pydantic** and understand how it differs from Django REST Framework.
-- Deploy a simple FastAPI app in a Docker container on AWS EC2.
+### Authentication
 
----
+*   `POST /login`: Authenticate a user and receive a JWT token.
+*   `POST /register`: Register a new user.
 
-##  FastAPI vs Django REST
+### Movies
 
-Coming from Django REST, some differences were immediately noticeable:
+*   `GET /movies`: Get a list of all movies.
+*   `GET /movies/{id}`: Get a movie by its ID.
+*   `GET /movies/?category={category}`: Get movies by category (Query Parameter).
+*   `POST /movies`: Create a new movie.
+*   `PUT /movies/{id}`: Update an existing movie.
+*   `DELETE /movies/{id}`: Delete a movie.
 
-- In **Django REST**, you define a **serializer**, link it to a model and data, and use `partial=True` to update only the fields you need..
-- In **FastAPI**, you need to:
-  - Create a **separate Pydantic model** for updates. (You might say this is good because it follows the **S** in **SOLID**, but...)
-  - Convert the request body to a dictionary.
-  - Manually iterate over the fields and update them one by one.
-
-Example:
-
-```python
-update_data = movie_update.model_dump(exclude_unset=True)
-for key, value in update_data.items():
-    setattr(movie, key, value)
-```
--More stuff
-
-
----
-
-##  Docker + Deployment
-
-The project was deployed on an **EC2 instance using Docker**.  
+## Deployment
+I also deployed this API on an AWS EC2 instance using Docker. 
 
 
----
