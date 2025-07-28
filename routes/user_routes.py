@@ -1,19 +1,12 @@
 import bcrypt
-from fastapi import Depends, FastAPI, Body, HTTPException, Path, Query, Request, APIRouter
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.security import HTTPBearer
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
-from typing import Optional
+from fastapi import Depends, HTTPException, APIRouter
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from db.database import get_db
 from sqlalchemy.orm import Session
-from sqlalchemy import JSON
-from JWT import createToken, validateToken
-from models.movie import Movie as modelMovie
+from JWT import createToken
 from models.user import User as modelUser
-from db.database import engine,  Base
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound
-from routes.movie_routes import routerMovie
+
 
 userRouter = APIRouter()
 
@@ -24,10 +17,10 @@ class User(BaseModel):
 
 
 @userRouter.post('/login', tags=['Authentication'])
-def login(user: User,db: Session = Depends(get_db)):
+def login(user: User, db: Session = Depends(get_db)):
 
     db_user = db.query(modelUser).filter(modelUser.email == user.email).first()
-    
+
     if not db_user:
         raise HTTPException(status_code=404, detail="Email no registrado")
 
@@ -41,8 +34,8 @@ def login(user: User,db: Session = Depends(get_db)):
 
 
 @userRouter.post('/register', tags=['Register'])
-def register(user: User,db: Session = Depends(get_db)):
-    
+def register(user: User, db: Session = Depends(get_db)):
+
     data = db.query(modelUser).filter(
         modelUser.email == user.email).first()
     if data:
@@ -55,4 +48,3 @@ def register(user: User,db: Session = Depends(get_db)):
     db.commit()
     db.refresh(newUser)
     return JSONResponse(status_code=201, content={'message': 'usuario creado correctamente'})
-    

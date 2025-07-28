@@ -1,17 +1,14 @@
-from fastapi import Depends, FastAPI, Body, HTTPException, Path, Query, Request, APIRouter
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import Depends, HTTPException, Path, Query, Request, APIRouter
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from typing import Optional
 from sqlalchemy.orm import Session
 from db.database import get_db
-
-from sqlalchemy import JSON
-from JWT import createToken, validateToken
+from JWT import validateToken
 from models.movie import Movie as modelMovie
-from db.database import engine, Base
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.exc import NoResultFound
 
 routerMovie = APIRouter()
 
@@ -52,17 +49,16 @@ def get_movies(db: Session = Depends(get_db)):
 
 
 @routerMovie.get('/movies/{id}', tags=['Movies'], dependencies=[Depends(BearerJWT())])
-def get_movie(id: int = Path(ge=0),db: Session = Depends(get_db)):
+def get_movie(id: int = Path(ge=0), db: Session = Depends(get_db)):
     try:
         data = db.query(modelMovie).filter(modelMovie.id == id).one()
         return JSONResponse(content=jsonable_encoder(data))
     except NoResultFound:
         return JSONResponse(content="Esa peli no existe")
-    
 
 
 @routerMovie.get('/movies/', tags=['Movies'], dependencies=[Depends(BearerJWT())])
-def get_movie_by_category(category: str = Query(min_length=8, max_length=60),db: Session = Depends(get_db)):
+def get_movie_by_category(category: str = Query(min_length=8, max_length=60), db: Session = Depends(get_db)):
     data = db.query(modelMovie).filter(modelMovie.category == category).all()
     if not data:
         return JSONResponse(content="Esa categoria no existe ")
@@ -71,17 +67,17 @@ def get_movie_by_category(category: str = Query(min_length=8, max_length=60),db:
 
 
 @routerMovie.post('/movies', tags=['Movies'], dependencies=[Depends(BearerJWT())])
-def create_movies(movie: Movie,db: Session = Depends(get_db)):
+def create_movies(movie: Movie, db: Session = Depends(get_db)):
 
     newMovie = modelMovie(**movie.model_dump())
     db.add(newMovie)
     db.commit()
-    
+
     return JSONResponse(content={'Message': 'Se ha creado la pelicula', 'movie': movie.model_dump()})
 
 
 @routerMovie.patch('/movies/{id}', tags=['Movies'], dependencies=[Depends(BearerJWT())])
-def update_movie(id: int, movie_update: MovieUpdate,db: Session = Depends(get_db)):
+def update_movie(id: int, movie_update: MovieUpdate, db: Session = Depends(get_db)):
 
     try:
         data = db.query(modelMovie).filter(modelMovie.id == id).one()
@@ -95,12 +91,11 @@ def update_movie(id: int, movie_update: MovieUpdate,db: Session = Depends(get_db
         return JSONResponse(content={"message": "Pelicula correctamente actualizada"})
     except NoResultFound:
         return JSONResponse(content="Esa  pelicula  no  existe")
-    
 
 
 @routerMovie.delete('/movies/{id}', tags=['Movies'], status_code=204, dependencies=[Depends(BearerJWT())])
-def delete_movie(id: int,db: Session = Depends(get_db)):
-    
+def delete_movie(id: int, db: Session = Depends(get_db)):
+
     try:
         data = db.query(modelMovie).filter(modelMovie.id == id).one()
         db.delete(data)
@@ -109,4 +104,3 @@ def delete_movie(id: int,db: Session = Depends(get_db)):
 
     except NoResultFound:
         return JSONResponse(content="Esa pelicula no existe ")
-    

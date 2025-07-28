@@ -61,7 +61,7 @@ def client():
 
 # 4. Tests
 
-def test_register_user(client: TestClient):
+def test_registrar_user(client: TestClient):
 
     # 1. Registro de un usuario
     response = client.post(
@@ -72,7 +72,7 @@ def test_register_user(client: TestClient):
     assert response.json()["message"] == "usuario creado correctamente"
 
 
-def test_register_existing_user(client: TestClient):
+def test_registrar_user_existente(client: TestClient):
 
     # 1. Registro de un usuario
     client.post(
@@ -85,3 +85,95 @@ def test_register_existing_user(client: TestClient):
     # 3. Verificación
     assert response.status_code == 404, response.text
     assert "Email ya registrado" in response.json()["detail"]
+
+
+# Principalmente para probar el funcionamiento de Next.
+def test_usar_get_movies(client: TestClient):
+    # 1. Registro de un usuario
+    client.post(
+        "/register", json={"email": "user@gmail.com", "password": "1234"})
+
+    # 2. Hacer login y obtener el token
+    login_response = client.post(
+        "/login", json={"email": "user@gmail.com", "password": "1234"})
+    assert login_response.status_code == 200
+    token = login_response.json()["token"]  # la clave donde esta el Token
+
+    # 3. Insertar una peli para verificar contenido
+    # Forzar a que nos devuelva el yield con la nueva sesion
+    db = next(override_get_db())
+    from models.movie import Movie
+    db.add(Movie(title="Test Movieeee", overview="A short overviewww",
+           rating=4.5, year=2024, category="Adventureeee"))
+    db.commit()
+
+    # 4. Llamar a /movies con el token en el header
+    response = client.get(
+        "/movies", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    movies = response.json()
+    # verificar que nos devuelve una lista con las peliculas
+    assert isinstance(movies, list)
+    # verificar si esta la pelicula, como solo hay una, su id será 1.
+    assert any(m["id"] == 1 for m in movies)
+
+
+def test_usar_create_movies(client: TestClient):
+    # 1. Registro de un usuario
+    client.post(
+        "/register", json={"email": "user@gmail.com", "password": "1234"})
+
+    # 2. Hacer login y obtener el token
+    login_response = client.post(
+        "/login", json={"email": "user@gmail.com", "password": "1234"})
+    assert login_response.status_code == 200
+    token = login_response.json()["token"]  # la clave donde esta el Token
+
+    # 3. Crear película usando el token
+    response = client.post(
+        "/movies",
+        headers={"Authorization": f"Bearer {token}"},
+        json={
+            "title": "Inception",
+            "overview": "Dreams within dreams",
+            "rating": 9,
+            "year": 2010,
+            "category": "Science Fiction"
+        }
+    )
+    assert response.status_code == 200
+    assert response.json()["movie"]["title"] == "Inception"
+
+
+def test_usar_get_movies_diferente(client: TestClient):
+    # 1. Registro de un usuario
+    client.post(
+        "/register", json={"email": "user@gmail.com", "password": "1234"})
+
+    # 2. Hacer login y obtener el token
+    login_response = client.post(
+        "/login", json={"email": "user@gmail.com", "password": "1234"})
+    assert login_response.status_code == 200
+    token = login_response.json()["token"]  # la clave donde esta el Token
+
+    # 3. Crear película usando el token
+    response = client.post(
+        "/movies",
+        headers={"Authorization": f"Bearer {token}"},
+        json={
+            "title": "Inception",
+            "overview": "Dreams within dreams",
+            "rating": 9,
+            "year": 2010,
+            "category": "Science Fiction"
+        }
+    )
+    # 4. Llamar a /movies con el token en el header
+    response = client.get(
+        "/movies", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    movies = response.json()
+    # verificar que nos devuelve una lista con las peliculas
+    assert isinstance(movies, list)
+    # verificar si esta la pelicula, como solo hay una, su id será 1.
+    assert any(m["id"] == 1 for m in movies)

@@ -1,23 +1,15 @@
-from fastapi import Depends, FastAPI, Body, HTTPException, Path, Query, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.security import HTTPBearer
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
-from typing import Optional
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 import os
-from sqlalchemy import JSON
 import uvicorn
-from JWT import createToken, validateToken
-from models.movie import Movie as modelMovie
-from db.database import engine, Session, Base
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound
+from db.database import engine, Base
 from routes.movie_routes import routerMovie
 from routes.user_routes import userRouter
 
 app = FastAPI(
     title="Documentacion automatica",
     description="endpoints",
-     openapi_tags=[
+    openapi_tags=[
         {
             "name": "Movies",
             "description": "Funciones CRUD para las peliculas."
