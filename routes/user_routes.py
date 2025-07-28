@@ -31,7 +31,7 @@ def login(user: User,db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(status_code=404, detail="Email no registrado")
 
-    if not bcrypt.checkpw(user.password.encode("utf-8"), db_user.password):
+    if not bcrypt.checkpw(user.password.encode("utf-8"), db_user.password.encode("utf-8")):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
     token_data = {"id": db_user.id, "email": db_user.email}
@@ -48,7 +48,7 @@ def register(user: User,db: Session = Depends(get_db)):
     if data:
         raise HTTPException(status_code=404, detail="Email ya registrado")
     hashed_password = bcrypt.hashpw(
-        user.password.encode("utf-8"), bcrypt.gensalt())
+        user.password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
     user.password = hashed_password
     newUser = modelUser(**user.model_dump())
     db.add(newUser)

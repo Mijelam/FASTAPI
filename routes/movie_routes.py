@@ -80,7 +80,7 @@ def create_movies(movie: Movie,db: Session = Depends(get_db)):
     return JSONResponse(content={'Message': 'Se ha creado la pelicula', 'movie': movie.model_dump()})
 
 
-@routerMovie.put('/movies/{id}', tags=['Movies'], dependencies=[Depends(BearerJWT())])
+@routerMovie.patch('/movies/{id}', tags=['Movies'], dependencies=[Depends(BearerJWT())])
 def update_movie(id: int, movie_update: MovieUpdate,db: Session = Depends(get_db)):
 
     try:
