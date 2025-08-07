@@ -40,6 +40,6 @@ You can create, read, update, and delete movies, and also register/login users w
 
 ## Deployment
 * I also deployed this API on an AWS EC2 instance using Docker. 
-* You can see it here http://18.119.99.40:2000/docs (if it's still running)
+* You can see it here 18.191.57.251:8000/docs (if it's still running)
 
 
