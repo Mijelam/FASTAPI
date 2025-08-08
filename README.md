@@ -10,7 +10,7 @@ You can create, read, update, and delete movies, and also register/login users w
 * **Database:** Uses SQLite with SQLAlchemy.  
 * **Validation:** Uses Pydantic to check the data.  
 * **Testing:** Some tests with pytest.  
-* **Docker:** Includes a `dockerfile` to run it in a container if needed.
+* **Docker:** Includes a `dockerfile` to run it in a container
 
 ## Tech Used
 
