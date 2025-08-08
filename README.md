@@ -1,4 +1,4 @@
-# Movie API
+# Movie Manager API
 
 This is a REST API for managing movies. I made it with FastAPI and SQLAlchemy while learning backend stuff.  
 You can create, read, update, and delete movies, and also register/login users with JWT tokens.
