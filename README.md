@@ -39,7 +39,14 @@ You can create, read, update, and delete movies, and also register/login users w
 *   `DELETE /movies/{id}`: Delete a movie.
 
 ## Deployment
-* I also deployed this API on an AWS EC2 instance using Docker. 
-* You can see it here 18.191.57.251:8000/docs (if it's still running)
+The FastAPI application was deployed on an EC2 instance with HTTPS enabled.  
+
+- NGINX was used as a **reverse proxy** to forward requests to the FastAPI app running in a container.  
+- A free domain was created using **No-IP** (`moviesapi.ddns.net`).  
+- **Certbot** with Let's Encrypt was used to generate a free SSL certificate for HTTPS.  
+- AWS Security Group rules were updated to allow traffic on **ports 80 (HTTP) and 443 (HTTPS)**.  
+
+After this setup, the API is accessible securely at:
+[API Documentation](https://moviesapi.ddns.net/docs)
 
 
